@@ -1,0 +1,570 @@
+{
+  "descripcion": "Resultado real de cada escenario, generado por el motor.",
+  "casos": [
+    {
+      "id": "bajo",
+      "nombre": "Equipo consolidado, alcance estable",
+      "entradas": {
+        "nombre_proyecto": "Portal de autogestión",
+        "duracion_meses": 6,
+        "requisitos_cambiantes": "bajo",
+        "documentacion_requisitos": "completa",
+        "tamano_equipo": "mediano",
+        "experiencia_equipo": "media",
+        "rotacion_equipo": "baja",
+        "pruebas": "buenas",
+        "integracion_continua": "si",
+        "control_versiones": "bueno",
+        "tiempo_disponible": "ajustado",
+        "planificacion": "detallada",
+        "dependencias_externas": "ninguna"
+      },
+      "nivelEsperado": "bajo",
+      "nivelObtenido": "bajo",
+      "puntaje": 2,
+      "ciclos": 2,
+      "reglasActivadas": [
+        "R-D2",
+        "R-07",
+        "R-22"
+      ],
+      "evidencias": [
+        {
+          "titulo": "Experiencia intermedia del equipo",
+          "puntos": 1
+        },
+        {
+          "titulo": "Cronograma ajustado",
+          "puntos": 1
+        }
+      ],
+      "porCategoria": [
+        {
+          "categoria": "Planificación",
+          "puntos": 1
+        },
+        {
+          "categoria": "Equipo",
+          "puntos": 1
+        }
+      ],
+      "recomendaciones": [
+        "Emparejar a quienes tienen menos experiencia",
+        "Reservar holgura para integración y corrección"
+      ]
+    },
+    {
+      "id": "volatil-solido",
+      "nombre": "Alcance móvil sobre ingeniería sólida",
+      "entradas": {
+        "nombre_proyecto": "Rediseño del checkout",
+        "duracion_meses": 10,
+        "requisitos_cambiantes": "alto",
+        "documentacion_requisitos": "completa",
+        "tamano_equipo": "mediano",
+        "experiencia_equipo": "alta",
+        "rotacion_equipo": "baja",
+        "pruebas": "buenas",
+        "integracion_continua": "si",
+        "control_versiones": "bueno",
+        "tiempo_disponible": "holgado",
+        "planificacion": "detallada",
+        "dependencias_externas": "algunas"
+      },
+      "nivelEsperado": "bajo",
+      "nivelObtenido": "bajo",
+      "puntaje": 5,
+      "ciclos": 3,
+      "reglasActivadas": [
+        "R-D3",
+        "R-01",
+        "R-25"
+      ],
+      "evidencias": [
+        {
+          "titulo": "Requisitos cambiantes",
+          "puntos": 3
+        },
+        {
+          "titulo": "Requisitos volátiles en un proyecto largo",
+          "puntos": 2
+        }
+      ],
+      "porCategoria": [
+        {
+          "categoria": "Requisitos",
+          "puntos": 3
+        },
+        {
+          "categoria": "Planificación",
+          "puntos": 2
+        }
+      ],
+      "recomendaciones": [
+        "Abrir un proceso formal de gestión de cambios",
+        "Congelar una línea base de requisitos por iteración",
+        "Revisar el avance con el cliente en ciclos cortos"
+      ]
+    },
+    {
+      "id": "limite",
+      "nombre": "Plazo corto con dependencias críticas",
+      "entradas": {
+        "nombre_proyecto": "Integración con la pasarela de pagos",
+        "duracion_meses": 3,
+        "requisitos_cambiantes": "bajo",
+        "documentacion_requisitos": "completa",
+        "tamano_equipo": "pequeno",
+        "experiencia_equipo": "alta",
+        "rotacion_equipo": "baja",
+        "pruebas": "buenas",
+        "integracion_continua": "si",
+        "control_versiones": "bueno",
+        "tiempo_disponible": "bajo",
+        "planificacion": "detallada",
+        "dependencias_externas": "criticas"
+      },
+      "nivelEsperado": "bajo",
+      "nivelObtenido": "bajo",
+      "puntaje": 7,
+      "ciclos": 2,
+      "reglasActivadas": [
+        "R-D1",
+        "R-20",
+        "R-21",
+        "R-26"
+      ],
+      "evidencias": [
+        {
+          "titulo": "Dependencias externas críticas",
+          "puntos": 2
+        },
+        {
+          "titulo": "Tiempo disponible insuficiente",
+          "puntos": 3
+        },
+        {
+          "titulo": "Entrega ajustada dependiendo de terceros",
+          "puntos": 2
+        }
+      ],
+      "porCategoria": [
+        {
+          "categoria": "Planificación",
+          "puntos": 5
+        },
+        {
+          "categoria": "Técnico",
+          "puntos": 2
+        }
+      ],
+      "recomendaciones": [
+        "Renegociar alcance o plazo antes de comprometer la fecha",
+        "Acordar interfaces y fechas con los proveedores externos",
+        "Reservar holgura para integración y corrección"
+      ]
+    },
+    {
+      "id": "medio",
+      "nombre": "Varios frentes flojos, ninguno crítico",
+      "entradas": {
+        "nombre_proyecto": "Migración de facturación",
+        "duracion_meses": 8,
+        "requisitos_cambiantes": "medio",
+        "documentacion_requisitos": "parcial",
+        "tamano_equipo": "grande",
+        "experiencia_equipo": "media",
+        "rotacion_equipo": "media",
+        "pruebas": "parciales",
+        "integracion_continua": "parcial",
+        "control_versiones": "parcial",
+        "tiempo_disponible": "ajustado",
+        "planificacion": "basica",
+        "dependencias_externas": "algunas"
+      },
+      "nivelEsperado": "medio",
+      "nivelObtenido": "medio",
+      "puntaje": 10,
+      "ciclos": 2,
+      "reglasActivadas": [
+        "R-D2",
+        "R-02",
+        "R-04",
+        "R-07",
+        "R-10",
+        "R-11",
+        "R-13",
+        "R-17",
+        "R-22",
+        "R-24"
+      ],
+      "evidencias": [
+        {
+          "titulo": "Requisitos con cambios frecuentes",
+          "puntos": 1
+        },
+        {
+          "titulo": "Documentación de requisitos incompleta",
+          "puntos": 1
+        },
+        {
+          "titulo": "Experiencia intermedia del equipo",
+          "puntos": 1
+        },
+        {
+          "titulo": "Rotación moderada del equipo",
+          "puntos": 1
+        },
+        {
+          "titulo": "Equipo grande sin plan que lo sostenga",
+          "puntos": 2
+        },
+        {
+          "titulo": "Cobertura de pruebas parcial",
+          "puntos": 1
+        },
+        {
+          "titulo": "Uso desparejo del control de versiones",
+          "puntos": 1
+        },
+        {
+          "titulo": "Cronograma ajustado",
+          "puntos": 1
+        },
+        {
+          "titulo": "Planificación básica",
+          "puntos": 1
+        }
+      ],
+      "porCategoria": [
+        {
+          "categoria": "Requisitos",
+          "puntos": 2
+        },
+        {
+          "categoria": "Planificación",
+          "puntos": 2
+        },
+        {
+          "categoria": "Gestión",
+          "puntos": 2
+        },
+        {
+          "categoria": "Equipo",
+          "puntos": 2
+        },
+        {
+          "categoria": "Calidad",
+          "puntos": 1
+        },
+        {
+          "categoria": "Técnico",
+          "puntos": 1
+        }
+      ],
+      "recomendaciones": [
+        "Abrir un proceso formal de gestión de cambios",
+        "Construir un plan con hitos y dependencias explícitas",
+        "Dividir el equipo en células con responsable técnico",
+        "Documentar decisiones y rotar responsabilidades",
+        "Emparejar a quienes tienen menos experiencia",
+        "Cubrir con pruebas los flujos críticos",
+        "Escribir criterios de aceptación verificables",
+        "Reservar holgura para integración y corrección",
+        "Unificar el uso del control de versiones"
+      ]
+    },
+    {
+      "id": "tecnico-flojo",
+      "nombre": "Equipo chico sin prácticas técnicas",
+      "entradas": {
+        "nombre_proyecto": "Gestor de inventario interno",
+        "duracion_meses": 4,
+        "requisitos_cambiantes": "bajo",
+        "documentacion_requisitos": "parcial",
+        "tamano_equipo": "pequeno",
+        "experiencia_equipo": "media",
+        "rotacion_equipo": "baja",
+        "pruebas": "insuficientes",
+        "integracion_continua": "no",
+        "control_versiones": "deficiente",
+        "tiempo_disponible": "ajustado",
+        "planificacion": "basica",
+        "dependencias_externas": "ninguna"
+      },
+      "nivelEsperado": "medio",
+      "nivelObtenido": "medio",
+      "puntaje": 14,
+      "ciclos": 2,
+      "reglasActivadas": [
+        "R-D2",
+        "R-04",
+        "R-07",
+        "R-12",
+        "R-15",
+        "R-16",
+        "R-18",
+        "R-22",
+        "R-24"
+      ],
+      "evidencias": [
+        {
+          "titulo": "Documentación de requisitos incompleta",
+          "puntos": 1
+        },
+        {
+          "titulo": "Experiencia intermedia del equipo",
+          "puntos": 1
+        },
+        {
+          "titulo": "Pruebas insuficientes",
+          "puntos": 3
+        },
+        {
+          "titulo": "Validación manual sin automatización",
+          "puntos": 2
+        },
+        {
+          "titulo": "Control de versiones deficiente",
+          "puntos": 3
+        },
+        {
+          "titulo": "Sin integración continua",
+          "puntos": 2
+        },
+        {
+          "titulo": "Cronograma ajustado",
+          "puntos": 1
+        },
+        {
+          "titulo": "Planificación básica",
+          "puntos": 1
+        }
+      ],
+      "porCategoria": [
+        {
+          "categoria": "Calidad",
+          "puntos": 5
+        },
+        {
+          "categoria": "Técnico",
+          "puntos": 5
+        },
+        {
+          "categoria": "Planificación",
+          "puntos": 2
+        },
+        {
+          "categoria": "Requisitos",
+          "puntos": 1
+        },
+        {
+          "categoria": "Equipo",
+          "puntos": 1
+        }
+      ],
+      "recomendaciones": [
+        "Adoptar un flujo de ramas con revisión obligatoria",
+        "Cubrir con pruebas los flujos críticos",
+        "Integrar temprano y seguido",
+        "Montar integración continua",
+        "Construir un plan con hitos y dependencias explícitas",
+        "Emparejar a quienes tienen menos experiencia",
+        "Automatizar las pruebas repetitivas",
+        "Reservar holgura para integración y corrección",
+        "Escribir criterios de aceptación verificables"
+      ]
+    },
+    {
+      "id": "alto",
+      "nombre": "Todos los factores en rojo",
+      "entradas": {
+        "nombre_proyecto": "Reemplazo del core",
+        "duracion_meses": 12,
+        "requisitos_cambiantes": "alto",
+        "documentacion_requisitos": "inexistente",
+        "tamano_equipo": "grande",
+        "experiencia_equipo": "baja",
+        "rotacion_equipo": "alta",
+        "pruebas": "insuficientes",
+        "integracion_continua": "no",
+        "control_versiones": "deficiente",
+        "tiempo_disponible": "bajo",
+        "planificacion": "inexistente",
+        "dependencias_externas": "criticas"
+      },
+      "nivelEsperado": "alto",
+      "nivelObtenido": "alto",
+      "puntaje": 60,
+      "ciclos": 4,
+      "reglasActivadas": [
+        "R-D3",
+        "R-01",
+        "R-03",
+        "R-05",
+        "R-06",
+        "R-08",
+        "R-09",
+        "R-11",
+        "R-12",
+        "R-14",
+        "R-15",
+        "R-16",
+        "R-18",
+        "R-19",
+        "R-20",
+        "R-21",
+        "R-23",
+        "R-26",
+        "R-25",
+        "R-30",
+        "R-31",
+        "R-32",
+        "R-33",
+        "R-34"
+      ],
+      "evidencias": [
+        {
+          "titulo": "Requisitos cambiantes",
+          "puntos": 3
+        },
+        {
+          "titulo": "Requisitos sin documentar",
+          "puntos": 3
+        },
+        {
+          "titulo": "Alcance sin control",
+          "puntos": 3
+        },
+        {
+          "titulo": "Experiencia baja del equipo",
+          "puntos": 2
+        },
+        {
+          "titulo": "Equipo grande con poca experiencia",
+          "puntos": 3
+        },
+        {
+          "titulo": "Rotación alta del equipo",
+          "puntos": 3
+        },
+        {
+          "titulo": "Equipo grande sin plan que lo sostenga",
+          "puntos": 2
+        },
+        {
+          "titulo": "Pruebas insuficientes",
+          "puntos": 3
+        },
+        {
+          "titulo": "Pruebas insuficientes con el tiempo encima",
+          "puntos": 3
+        },
+        {
+          "titulo": "Validación manual sin automatización",
+          "puntos": 2
+        },
+        {
+          "titulo": "Control de versiones deficiente",
+          "puntos": 3
+        },
+        {
+          "titulo": "Sin integración continua",
+          "puntos": 2
+        },
+        {
+          "titulo": "Integración frágil con muchas manos en el código",
+          "puntos": 3
+        },
+        {
+          "titulo": "Dependencias externas críticas",
+          "puntos": 2
+        },
+        {
+          "titulo": "Tiempo disponible insuficiente",
+          "puntos": 3
+        },
+        {
+          "titulo": "Proyecto sin planificación",
+          "puntos": 3
+        },
+        {
+          "titulo": "Entrega ajustada dependiendo de terceros",
+          "puntos": 2
+        },
+        {
+          "titulo": "Requisitos volátiles en un proyecto largo",
+          "puntos": 2
+        },
+        {
+          "titulo": "Entrega frágil",
+          "puntos": 3
+        },
+        {
+          "titulo": "Alcance que crece contra un plazo que no se mueve",
+          "puntos": 3
+        },
+        {
+          "titulo": "Equipo sin experiencia y sin red de pruebas",
+          "puntos": 2
+        },
+        {
+          "titulo": "Continuidad del equipo comprometida",
+          "puntos": 2
+        },
+        {
+          "titulo": "Riesgo sistémico",
+          "puntos": 3
+        }
+      ],
+      "porCategoria": [
+        {
+          "categoria": "Planificación",
+          "puntos": 13
+        },
+        {
+          "categoria": "Calidad",
+          "puntos": 13
+        },
+        {
+          "categoria": "Técnico",
+          "puntos": 10
+        },
+        {
+          "categoria": "Requisitos",
+          "puntos": 9
+        },
+        {
+          "categoria": "Gestión",
+          "puntos": 8
+        },
+        {
+          "categoria": "Equipo",
+          "puntos": 7
+        }
+      ],
+      "recomendaciones": [
+        "Construir un plan con hitos y dependencias explícitas",
+        "Cubrir con pruebas los flujos críticos",
+        "Renegociar alcance o plazo antes de comprometer la fecha",
+        "Acordar interfaces y fechas con los proveedores externos",
+        "Adoptar un flujo de ramas con revisión obligatoria",
+        "Integrar temprano y seguido",
+        "Montar integración continua",
+        "Abrir un proceso formal de gestión de cambios",
+        "Definir un alcance mínimo entregable",
+        "Dividir el equipo en células con responsable técnico",
+        "Escalar el riesgo a dirección y activar contingencia",
+        "Documentar decisiones y rotar responsabilidades",
+        "Emparejar a quienes tienen menos experiencia",
+        "Acordar una definición de terminado",
+        "Automatizar las pruebas repetitivas",
+        "Reservar holgura para integración y corrección",
+        "Congelar una línea base de requisitos por iteración",
+        "Escribir criterios de aceptación verificables",
+        "Revisar el avance con el cliente en ciclos cortos",
+        "Formalizar la incorporación de nuevas personas"
+      ]
+    }
+  ]
+}

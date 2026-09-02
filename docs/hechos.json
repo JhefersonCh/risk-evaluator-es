@@ -1,0 +1,169 @@
+{
+  "descripcion": "Hechos que el sistema recibe del usuario, agrupados por paso del recorrido.",
+  "totalHechos": 12,
+  "pasos": [
+    {
+      "orden": "01",
+      "titulo": "Información",
+      "proposito": "Identificá el proyecto y su horizonte temporal.",
+      "hechos": [
+        {
+          "id": "duracion_meses",
+          "etiqueta": "Duración estimada",
+          "tipo": "numerico",
+          "categoria": "planificacion",
+          "dominio": "1..24 meses"
+        }
+      ]
+    },
+    {
+      "orden": "02",
+      "titulo": "Requisitos",
+      "proposito": "Cuánto se mueve el alcance y qué queda escrito.",
+      "hechos": [
+        {
+          "id": "requisitos_cambiantes",
+          "etiqueta": "Requisitos cambiantes",
+          "tipo": "categorico",
+          "categoria": "requisitos",
+          "dominio": [
+            "bajo",
+            "medio",
+            "alto"
+          ]
+        },
+        {
+          "id": "documentacion_requisitos",
+          "etiqueta": "Documentación de requisitos",
+          "tipo": "categorico",
+          "categoria": "requisitos",
+          "dominio": [
+            "completa",
+            "parcial",
+            "inexistente"
+          ]
+        }
+      ]
+    },
+    {
+      "orden": "03",
+      "titulo": "Equipo",
+      "proposito": "Quiénes construyen y qué tan estable es el grupo.",
+      "hechos": [
+        {
+          "id": "tamano_equipo",
+          "etiqueta": "Tamaño del equipo",
+          "tipo": "categorico",
+          "categoria": "gestion",
+          "dominio": [
+            "pequeno",
+            "mediano",
+            "grande"
+          ]
+        },
+        {
+          "id": "experiencia_equipo",
+          "etiqueta": "Experiencia del equipo",
+          "tipo": "categorico",
+          "categoria": "equipo",
+          "dominio": [
+            "alta",
+            "media",
+            "baja"
+          ]
+        },
+        {
+          "id": "rotacion_equipo",
+          "etiqueta": "Rotación del equipo",
+          "tipo": "categorico",
+          "categoria": "equipo",
+          "dominio": [
+            "baja",
+            "media",
+            "alta"
+          ]
+        }
+      ]
+    },
+    {
+      "orden": "04",
+      "titulo": "Calidad",
+      "proposito": "Qué red detiene los defectos antes de que lleguen al usuario.",
+      "hechos": [
+        {
+          "id": "pruebas",
+          "etiqueta": "Pruebas",
+          "tipo": "categorico",
+          "categoria": "calidad",
+          "dominio": [
+            "buenas",
+            "parciales",
+            "insuficientes"
+          ]
+        },
+        {
+          "id": "integracion_continua",
+          "etiqueta": "Integración continua",
+          "tipo": "categorico",
+          "categoria": "tecnico",
+          "dominio": [
+            "si",
+            "parcial",
+            "no"
+          ]
+        },
+        {
+          "id": "control_versiones",
+          "etiqueta": "Control de versiones",
+          "tipo": "categorico",
+          "categoria": "tecnico",
+          "dominio": [
+            "bueno",
+            "parcial",
+            "deficiente"
+          ]
+        }
+      ]
+    },
+    {
+      "orden": "05",
+      "titulo": "Tiempo y planificación",
+      "proposito": "Si el plan sostiene el compromiso asumido.",
+      "hechos": [
+        {
+          "id": "tiempo_disponible",
+          "etiqueta": "Tiempo disponible",
+          "tipo": "categorico",
+          "categoria": "planificacion",
+          "dominio": [
+            "holgado",
+            "ajustado",
+            "bajo"
+          ]
+        },
+        {
+          "id": "planificacion",
+          "etiqueta": "Planificación",
+          "tipo": "categorico",
+          "categoria": "planificacion",
+          "dominio": [
+            "detallada",
+            "basica",
+            "inexistente"
+          ]
+        },
+        {
+          "id": "dependencias_externas",
+          "etiqueta": "Dependencias externas",
+          "tipo": "categorico",
+          "categoria": "tecnico",
+          "dominio": [
+            "ninguna",
+            "algunas",
+            "criticas"
+          ]
+        }
+      ]
+    }
+  ]
+}

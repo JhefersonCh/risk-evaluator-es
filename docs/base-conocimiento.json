@@ -1,0 +1,1263 @@
+{
+  "descripcion": "Base de conocimiento del evaluador de riesgo de proyectos de software. Reglas de produccion evaluadas por encadenamiento hacia adelante.",
+  "umbrales": [
+    {
+      "nivel": "bajo",
+      "min": 0,
+      "max": 7,
+      "rango": "0 – 7 puntos"
+    },
+    {
+      "nivel": "medio",
+      "min": 8,
+      "max": 17,
+      "rango": "8 – 17 puntos"
+    },
+    {
+      "nivel": "alto",
+      "min": 18,
+      "max": null,
+      "rango": "18 puntos o más"
+    }
+  ],
+  "categorias": {
+    "requisitos": "Requisitos",
+    "planificacion": "Planificación",
+    "calidad": "Calidad",
+    "tecnico": "Técnico",
+    "gestion": "Gestión",
+    "equipo": "Equipo"
+  },
+  "totalReglas": 34,
+  "reglas": [
+    {
+      "id": "R-D1",
+      "nombre": "Horizonte corto",
+      "enunciado": "SI duración ≤ 3 meses ENTONCES horizonte = corto",
+      "prioridad": 100,
+      "condiciones": [
+        {
+          "hecho": "duracion_meses",
+          "operador": "lte",
+          "valor": 3,
+          "lectura": "duración ≤ 3 meses"
+        }
+      ],
+      "conclusion": {
+        "hecho": "horizonte",
+        "valor": "corto",
+        "lectura": "Horizonte del proyecto: corto"
+      },
+      "evidencia": null
+    },
+    {
+      "id": "R-D2",
+      "nombre": "Horizonte medio",
+      "enunciado": "SI duración > 3 meses Y duración ≤ 9 meses ENTONCES horizonte = medio",
+      "prioridad": 100,
+      "condiciones": [
+        {
+          "hecho": "duracion_meses",
+          "operador": "gt",
+          "valor": 3,
+          "lectura": "duración > 3 meses"
+        },
+        {
+          "hecho": "duracion_meses",
+          "operador": "lte",
+          "valor": 9,
+          "lectura": "duración ≤ 9 meses"
+        }
+      ],
+      "conclusion": {
+        "hecho": "horizonte",
+        "valor": "medio",
+        "lectura": "Horizonte del proyecto: medio"
+      },
+      "evidencia": null
+    },
+    {
+      "id": "R-D3",
+      "nombre": "Horizonte largo",
+      "enunciado": "SI duración > 9 meses ENTONCES horizonte = largo",
+      "prioridad": 100,
+      "condiciones": [
+        {
+          "hecho": "duracion_meses",
+          "operador": "gt",
+          "valor": 9,
+          "lectura": "duración > 9 meses"
+        }
+      ],
+      "conclusion": {
+        "hecho": "horizonte",
+        "valor": "largo",
+        "lectura": "Horizonte del proyecto: largo"
+      },
+      "evidencia": null
+    },
+    {
+      "id": "R-01",
+      "nombre": "Volatilidad alta de requisitos",
+      "enunciado": "SI requisitos cambiantes = alto ENTONCES riesgo de requisitos = alto (+3)",
+      "prioridad": 90,
+      "condiciones": [
+        {
+          "hecho": "requisitos_cambiantes",
+          "operador": "eq",
+          "valor": "alto",
+          "lectura": "requisitos cambiantes = alto"
+        }
+      ],
+      "conclusion": {
+        "hecho": "riesgo_requisitos",
+        "valor": "alto",
+        "lectura": "Riesgo de requisitos: alto"
+      },
+      "evidencia": {
+        "id": "E-REQ-VOLATIL",
+        "titulo": "Requisitos cambiantes",
+        "detalle": "El alcance se mueve durante la ejecución, así que toda estimación nace vencida.",
+        "categoria": "requisitos",
+        "puntos": 3,
+        "recomendaciones": [
+          "REC-GESTION-CAMBIOS",
+          "REC-BASELINE-REQ"
+        ]
+      }
+    },
+    {
+      "id": "R-02",
+      "nombre": "Volatilidad moderada de requisitos",
+      "enunciado": "SI requisitos cambiantes = medio ENTONCES riesgo de requisitos = medio (+1)",
+      "prioridad": 89,
+      "condiciones": [
+        {
+          "hecho": "requisitos_cambiantes",
+          "operador": "eq",
+          "valor": "medio",
+          "lectura": "requisitos cambiantes = medio"
+        }
+      ],
+      "conclusion": {
+        "hecho": "riesgo_requisitos",
+        "valor": "medio",
+        "lectura": "Riesgo de requisitos: medio"
+      },
+      "evidencia": {
+        "id": "E-REQ-MOVIL",
+        "titulo": "Requisitos con cambios frecuentes",
+        "detalle": "Los ajustes son manejables, pero sin un canal formal se acumulan sin control.",
+        "categoria": "requisitos",
+        "puntos": 1,
+        "recomendaciones": [
+          "REC-GESTION-CAMBIOS"
+        ]
+      }
+    },
+    {
+      "id": "R-03",
+      "nombre": "Requisitos sin documentar",
+      "enunciado": "SI documentación de requisitos = inexistente ENTONCES deuda de especificación = alta (+3)",
+      "prioridad": 88,
+      "condiciones": [
+        {
+          "hecho": "documentacion_requisitos",
+          "operador": "eq",
+          "valor": "inexistente",
+          "lectura": "documentación = inexistente"
+        }
+      ],
+      "conclusion": {
+        "hecho": "deuda_especificacion",
+        "valor": "alta",
+        "lectura": "Deuda de especificación: alta"
+      },
+      "evidencia": {
+        "id": "E-REQ-SIN-DOC",
+        "titulo": "Requisitos sin documentar",
+        "detalle": "Nadie puede verificar lo que no está escrito, así que \"terminado\" queda a interpretación.",
+        "categoria": "requisitos",
+        "puntos": 3,
+        "recomendaciones": [
+          "REC-DOC-REQ",
+          "REC-DEFINICION-HECHO"
+        ]
+      }
+    },
+    {
+      "id": "R-04",
+      "nombre": "Documentación parcial de requisitos",
+      "enunciado": "SI documentación de requisitos = parcial ENTONCES deuda de especificación = media (+1)",
+      "prioridad": 87,
+      "condiciones": [
+        {
+          "hecho": "documentacion_requisitos",
+          "operador": "eq",
+          "valor": "parcial",
+          "lectura": "documentación = parcial"
+        }
+      ],
+      "conclusion": {
+        "hecho": "deuda_especificacion",
+        "valor": "media",
+        "lectura": "Deuda de especificación: media"
+      },
+      "evidencia": {
+        "id": "E-REQ-DOC-PARCIAL",
+        "titulo": "Documentación de requisitos incompleta",
+        "detalle": "Las zonas sin documentar son donde más discute el equipo con el cliente.",
+        "categoria": "requisitos",
+        "puntos": 1,
+        "recomendaciones": [
+          "REC-DOC-REQ"
+        ]
+      }
+    },
+    {
+      "id": "R-05",
+      "nombre": "Alcance sin control",
+      "enunciado": "SI requisitos cambiantes = alto Y documentación ∈ {parcial, inexistente} ENTONCES alcance no controlado (+3)",
+      "prioridad": 86,
+      "condiciones": [
+        {
+          "hecho": "requisitos_cambiantes",
+          "operador": "eq",
+          "valor": "alto",
+          "lectura": "requisitos cambiantes = alto"
+        },
+        {
+          "hecho": "documentacion_requisitos",
+          "operador": "in",
+          "valor": [
+            "parcial",
+            "inexistente"
+          ],
+          "lectura": "documentación ∈ {parcial, inexistente}"
+        }
+      ],
+      "conclusion": {
+        "hecho": "alcance_no_controlado",
+        "valor": true,
+        "lectura": "Alcance no controlado"
+      },
+      "evidencia": {
+        "id": "E-REQ-ALCANCE",
+        "titulo": "Alcance sin control",
+        "detalle": "El alcance cambia y no queda registro de contra qué cambió: no hay línea base para negociar.",
+        "categoria": "requisitos",
+        "puntos": 3,
+        "recomendaciones": [
+          "REC-ALCANCE",
+          "REC-BASELINE-REQ",
+          "REC-STAKEHOLDERS"
+        ]
+      }
+    },
+    {
+      "id": "R-06",
+      "nombre": "Experiencia baja del equipo",
+      "enunciado": "SI experiencia = baja ENTONCES capacidad técnica = baja (+2)",
+      "prioridad": 85,
+      "condiciones": [
+        {
+          "hecho": "experiencia_equipo",
+          "operador": "eq",
+          "valor": "baja",
+          "lectura": "experiencia = baja"
+        }
+      ],
+      "conclusion": {
+        "hecho": "capacidad_tecnica",
+        "valor": "baja",
+        "lectura": "Capacidad técnica: baja"
+      },
+      "evidencia": {
+        "id": "E-EQ-EXP-BAJA",
+        "titulo": "Experiencia baja del equipo",
+        "detalle": "El equipo aprende sobre el proyecto, y ese aprendizaje se paga en tiempo y en defectos.",
+        "categoria": "equipo",
+        "puntos": 2,
+        "recomendaciones": [
+          "REC-MENTORIA"
+        ]
+      }
+    },
+    {
+      "id": "R-07",
+      "nombre": "Experiencia intermedia del equipo",
+      "enunciado": "SI experiencia = media ENTONCES capacidad técnica = media (+1)",
+      "prioridad": 84,
+      "condiciones": [
+        {
+          "hecho": "experiencia_equipo",
+          "operador": "eq",
+          "valor": "media",
+          "lectura": "experiencia = media"
+        }
+      ],
+      "conclusion": {
+        "hecho": "capacidad_tecnica",
+        "valor": "media",
+        "lectura": "Capacidad técnica: media"
+      },
+      "evidencia": {
+        "id": "E-EQ-EXP-MEDIA",
+        "titulo": "Experiencia intermedia del equipo",
+        "detalle": "Resuelve lo conocido con solvencia; lo nuevo le va a costar más de lo estimado.",
+        "categoria": "equipo",
+        "puntos": 1,
+        "recomendaciones": [
+          "REC-MENTORIA"
+        ]
+      }
+    },
+    {
+      "id": "R-08",
+      "nombre": "Equipo grande con poca experiencia",
+      "enunciado": "SI experiencia = baja Y tamaño = grande ENTONCES riesgo de coordinación = alto (+3)",
+      "prioridad": 83,
+      "condiciones": [
+        {
+          "hecho": "experiencia_equipo",
+          "operador": "eq",
+          "valor": "baja",
+          "lectura": "experiencia = baja"
+        },
+        {
+          "hecho": "tamano_equipo",
+          "operador": "eq",
+          "valor": "grande",
+          "lectura": "tamaño del equipo = grande"
+        }
+      ],
+      "conclusion": {
+        "hecho": "riesgo_coordinacion",
+        "valor": "alto",
+        "lectura": "Riesgo de coordinación: alto"
+      },
+      "evidencia": {
+        "id": "E-GES-COORD",
+        "titulo": "Equipo grande con poca experiencia",
+        "detalle": "Sumar personas sin criterio técnico multiplica los canales de comunicación, no la producción.",
+        "categoria": "gestion",
+        "puntos": 3,
+        "recomendaciones": [
+          "REC-SUBEQUIPOS",
+          "REC-MENTORIA"
+        ]
+      }
+    },
+    {
+      "id": "R-09",
+      "nombre": "Rotación alta",
+      "enunciado": "SI rotación = alta ENTONCES pérdida de conocimiento = alta (+3)",
+      "prioridad": 82,
+      "condiciones": [
+        {
+          "hecho": "rotacion_equipo",
+          "operador": "eq",
+          "valor": "alta",
+          "lectura": "rotación = alta"
+        }
+      ],
+      "conclusion": {
+        "hecho": "perdida_conocimiento",
+        "valor": "alta",
+        "lectura": "Pérdida de conocimiento: alta"
+      },
+      "evidencia": {
+        "id": "E-EQ-ROTACION",
+        "titulo": "Rotación alta del equipo",
+        "detalle": "Cada salida se lleva contexto que no está escrito y que el reemplazo tarda semanas en recuperar.",
+        "categoria": "equipo",
+        "puntos": 3,
+        "recomendaciones": [
+          "REC-DOC-CONOCIMIENTO",
+          "REC-ONBOARDING"
+        ]
+      }
+    },
+    {
+      "id": "R-10",
+      "nombre": "Rotación moderada",
+      "enunciado": "SI rotación = media ENTONCES pérdida de conocimiento = media (+1)",
+      "prioridad": 81,
+      "condiciones": [
+        {
+          "hecho": "rotacion_equipo",
+          "operador": "eq",
+          "valor": "media",
+          "lectura": "rotación = media"
+        }
+      ],
+      "conclusion": {
+        "hecho": "perdida_conocimiento",
+        "valor": "media",
+        "lectura": "Pérdida de conocimiento: media"
+      },
+      "evidencia": {
+        "id": "E-EQ-ROT-MEDIA",
+        "titulo": "Rotación moderada del equipo",
+        "detalle": "Los cambios de personas son absorbibles, siempre que el conocimiento no viva en una sola cabeza.",
+        "categoria": "equipo",
+        "puntos": 1,
+        "recomendaciones": [
+          "REC-DOC-CONOCIMIENTO"
+        ]
+      }
+    },
+    {
+      "id": "R-11",
+      "nombre": "Equipo grande sin planificación",
+      "enunciado": "SI tamaño = grande Y planificación ∈ {básica, inexistente} ENTONCES sobrecarga de gestión (+2)",
+      "prioridad": 80,
+      "condiciones": [
+        {
+          "hecho": "tamano_equipo",
+          "operador": "eq",
+          "valor": "grande",
+          "lectura": "tamaño del equipo = grande"
+        },
+        {
+          "hecho": "planificacion",
+          "operador": "in",
+          "valor": [
+            "basica",
+            "inexistente"
+          ],
+          "lectura": "planificación ∈ {básica, inexistente}"
+        }
+      ],
+      "conclusion": {
+        "hecho": "sobrecarga_gestion",
+        "valor": true,
+        "lectura": "Sobrecarga de gestión"
+      },
+      "evidencia": {
+        "id": "E-GES-SOBRECARGA",
+        "titulo": "Equipo grande sin plan que lo sostenga",
+        "detalle": "Con muchas personas y poco plan, la coordinación se resuelve en reuniones y el avance se frena.",
+        "categoria": "gestion",
+        "puntos": 2,
+        "recomendaciones": [
+          "REC-PLAN",
+          "REC-SUBEQUIPOS"
+        ]
+      }
+    },
+    {
+      "id": "R-12",
+      "nombre": "Pruebas insuficientes",
+      "enunciado": "SI pruebas = insuficientes ENTONCES cobertura de pruebas = crítica (+3)",
+      "prioridad": 79,
+      "condiciones": [
+        {
+          "hecho": "pruebas",
+          "operador": "eq",
+          "valor": "insuficientes",
+          "lectura": "pruebas = insuficientes"
+        }
+      ],
+      "conclusion": {
+        "hecho": "cobertura_pruebas",
+        "valor": "critica",
+        "lectura": "Cobertura de pruebas: crítica"
+      },
+      "evidencia": {
+        "id": "E-CAL-COBERTURA",
+        "titulo": "Pruebas insuficientes",
+        "detalle": "Los defectos llegan al usuario porque no hay red que los detenga antes.",
+        "categoria": "calidad",
+        "puntos": 3,
+        "recomendaciones": [
+          "REC-COBERTURA",
+          "REC-AUTOMATIZAR"
+        ]
+      }
+    },
+    {
+      "id": "R-13",
+      "nombre": "Pruebas parciales",
+      "enunciado": "SI pruebas = parciales ENTONCES cobertura de pruebas = parcial (+1)",
+      "prioridad": 78,
+      "condiciones": [
+        {
+          "hecho": "pruebas",
+          "operador": "eq",
+          "valor": "parciales",
+          "lectura": "pruebas = parciales"
+        }
+      ],
+      "conclusion": {
+        "hecho": "cobertura_pruebas",
+        "valor": "parcial",
+        "lectura": "Cobertura de pruebas: parcial"
+      },
+      "evidencia": {
+        "id": "E-CAL-PARCIAL",
+        "titulo": "Cobertura de pruebas parcial",
+        "detalle": "Hay pruebas, pero no sobre todo lo que el negocio no puede permitirse perder.",
+        "categoria": "calidad",
+        "puntos": 1,
+        "recomendaciones": [
+          "REC-COBERTURA"
+        ]
+      }
+    },
+    {
+      "id": "R-14",
+      "nombre": "Calidad comprimida por el cronograma",
+      "enunciado": "SI pruebas = insuficientes Y tiempo disponible = bajo ENTONCES riesgo de calidad = alto (+3)",
+      "prioridad": 77,
+      "condiciones": [
+        {
+          "hecho": "pruebas",
+          "operador": "eq",
+          "valor": "insuficientes",
+          "lectura": "pruebas = insuficientes"
+        },
+        {
+          "hecho": "tiempo_disponible",
+          "operador": "eq",
+          "valor": "bajo",
+          "lectura": "tiempo disponible = bajo"
+        }
+      ],
+      "conclusion": {
+        "hecho": "riesgo_calidad",
+        "valor": "alto",
+        "lectura": "Riesgo de calidad: alto"
+      },
+      "evidencia": {
+        "id": "E-CAL-PRESION",
+        "titulo": "Pruebas insuficientes con el tiempo encima",
+        "detalle": "Cuando falta tiempo se recorta lo que no se ve, y lo primero que no se ve son las pruebas.",
+        "categoria": "calidad",
+        "puntos": 3,
+        "recomendaciones": [
+          "REC-COBERTURA",
+          "REC-AUTOMATIZAR",
+          "REC-REPRIORIZAR"
+        ]
+      }
+    },
+    {
+      "id": "R-15",
+      "nombre": "Validación puramente manual",
+      "enunciado": "SI pruebas ∈ {insuficientes, parciales} Y integración continua = no ENTONCES validación manual (+2)",
+      "prioridad": 76,
+      "condiciones": [
+        {
+          "hecho": "pruebas",
+          "operador": "in",
+          "valor": [
+            "insuficientes",
+            "parciales"
+          ],
+          "lectura": "pruebas ∈ {insuficientes, parciales}"
+        },
+        {
+          "hecho": "integracion_continua",
+          "operador": "eq",
+          "valor": "no",
+          "lectura": "integración continua = no"
+        }
+      ],
+      "conclusion": {
+        "hecho": "validacion_manual",
+        "valor": true,
+        "lectura": "Validación manual"
+      },
+      "evidencia": {
+        "id": "E-CAL-MANUAL",
+        "titulo": "Validación manual sin automatización",
+        "detalle": "Verificar a mano en cada entrega es lento y se abandona justo cuando más falta hace.",
+        "categoria": "calidad",
+        "puntos": 2,
+        "recomendaciones": [
+          "REC-AUTOMATIZAR",
+          "REC-CI"
+        ]
+      }
+    },
+    {
+      "id": "R-16",
+      "nombre": "Control de versiones deficiente",
+      "enunciado": "SI control de versiones = deficiente ENTONCES riesgo técnico = alto (+3)",
+      "prioridad": 75,
+      "condiciones": [
+        {
+          "hecho": "control_versiones",
+          "operador": "eq",
+          "valor": "deficiente",
+          "lectura": "control de versiones = deficiente"
+        }
+      ],
+      "conclusion": {
+        "hecho": "riesgo_tecnico",
+        "valor": "alto",
+        "lectura": "Riesgo técnico: alto"
+      },
+      "evidencia": {
+        "id": "E-TEC-VCS",
+        "titulo": "Control de versiones deficiente",
+        "detalle": "Sin historial confiable no se puede volver atrás, y cada integración es una apuesta.",
+        "categoria": "tecnico",
+        "puntos": 3,
+        "recomendaciones": [
+          "REC-VCS",
+          "REC-INTEGRACION-TEMPRANA"
+        ]
+      }
+    },
+    {
+      "id": "R-17",
+      "nombre": "Control de versiones parcial",
+      "enunciado": "SI control de versiones = parcial ENTONCES riesgo técnico = medio (+1)",
+      "prioridad": 74,
+      "condiciones": [
+        {
+          "hecho": "control_versiones",
+          "operador": "eq",
+          "valor": "parcial",
+          "lectura": "control de versiones = parcial"
+        }
+      ],
+      "conclusion": {
+        "hecho": "riesgo_tecnico",
+        "valor": "medio",
+        "lectura": "Riesgo técnico: medio"
+      },
+      "evidencia": {
+        "id": "E-TEC-VCS-PARCIAL",
+        "titulo": "Uso desparejo del control de versiones",
+        "detalle": "Parte del equipo sigue el flujo y parte no: la trazabilidad se corta donde menos se espera.",
+        "categoria": "tecnico",
+        "puntos": 1,
+        "recomendaciones": [
+          "REC-VCS-BASICO"
+        ]
+      }
+    },
+    {
+      "id": "R-18",
+      "nombre": "Sin integración continua",
+      "enunciado": "SI integración continua = no ENTONCES automatización = ausente (+2)",
+      "prioridad": 73,
+      "condiciones": [
+        {
+          "hecho": "integracion_continua",
+          "operador": "eq",
+          "valor": "no",
+          "lectura": "integración continua = no"
+        }
+      ],
+      "conclusion": {
+        "hecho": "automatizacion",
+        "valor": "ausente",
+        "lectura": "Automatización: ausente"
+      },
+      "evidencia": {
+        "id": "E-TEC-CI",
+        "titulo": "Sin integración continua",
+        "detalle": "Los errores de integración aparecen tarde, cuando corregirlos cuesta varias veces más.",
+        "categoria": "tecnico",
+        "puntos": 2,
+        "recomendaciones": [
+          "REC-CI",
+          "REC-INTEGRACION-TEMPRANA"
+        ]
+      }
+    },
+    {
+      "id": "R-19",
+      "nombre": "Integración frágil en equipo grande",
+      "enunciado": "SI control de versiones = deficiente Y tamaño = grande ENTONCES riesgo de integración = alto (+3)",
+      "prioridad": 72,
+      "condiciones": [
+        {
+          "hecho": "control_versiones",
+          "operador": "eq",
+          "valor": "deficiente",
+          "lectura": "control de versiones = deficiente"
+        },
+        {
+          "hecho": "tamano_equipo",
+          "operador": "eq",
+          "valor": "grande",
+          "lectura": "tamaño del equipo = grande"
+        }
+      ],
+      "conclusion": {
+        "hecho": "riesgo_integracion",
+        "valor": "alto",
+        "lectura": "Riesgo de integración: alto"
+      },
+      "evidencia": {
+        "id": "E-TEC-INTEGRACION",
+        "titulo": "Integración frágil con muchas manos en el código",
+        "detalle": "Muchas personas tocando el mismo código sin un flujo sólido garantiza conflictos y trabajo perdido.",
+        "categoria": "tecnico",
+        "puntos": 3,
+        "recomendaciones": [
+          "REC-VCS",
+          "REC-INTEGRACION-TEMPRANA",
+          "REC-SUBEQUIPOS"
+        ]
+      }
+    },
+    {
+      "id": "R-20",
+      "nombre": "Dependencias externas críticas",
+      "enunciado": "SI dependencias externas = críticas ENTONCES riesgo de dependencias = alto (+2)",
+      "prioridad": 71,
+      "condiciones": [
+        {
+          "hecho": "dependencias_externas",
+          "operador": "eq",
+          "valor": "criticas",
+          "lectura": "dependencias externas = críticas"
+        }
+      ],
+      "conclusion": {
+        "hecho": "riesgo_dependencias",
+        "valor": "alto",
+        "lectura": "Riesgo de dependencias: alto"
+      },
+      "evidencia": {
+        "id": "E-TEC-DEPENDENCIAS",
+        "titulo": "Dependencias externas críticas",
+        "detalle": "Parte del avance depende de terceros que el proyecto no controla ni puede apurar.",
+        "categoria": "tecnico",
+        "puntos": 2,
+        "recomendaciones": [
+          "REC-DEPENDENCIAS"
+        ]
+      }
+    },
+    {
+      "id": "R-21",
+      "nombre": "Tiempo insuficiente",
+      "enunciado": "SI tiempo disponible = bajo ENTONCES presión de cronograma = alta (+3)",
+      "prioridad": 70,
+      "condiciones": [
+        {
+          "hecho": "tiempo_disponible",
+          "operador": "eq",
+          "valor": "bajo",
+          "lectura": "tiempo disponible = bajo"
+        }
+      ],
+      "conclusion": {
+        "hecho": "presion_cronograma",
+        "valor": "alta",
+        "lectura": "Presión de cronograma: alta"
+      },
+      "evidencia": {
+        "id": "E-PLA-TIEMPO",
+        "titulo": "Tiempo disponible insuficiente",
+        "detalle": "El plazo no alcanza para el alcance comprometido, y esa diferencia se paga en calidad.",
+        "categoria": "planificacion",
+        "puntos": 3,
+        "recomendaciones": [
+          "REC-REPRIORIZAR",
+          "REC-BUFFER"
+        ]
+      }
+    },
+    {
+      "id": "R-22",
+      "nombre": "Cronograma ajustado",
+      "enunciado": "SI tiempo disponible = ajustado ENTONCES presión de cronograma = media (+1)",
+      "prioridad": 69,
+      "condiciones": [
+        {
+          "hecho": "tiempo_disponible",
+          "operador": "eq",
+          "valor": "ajustado",
+          "lectura": "tiempo disponible = ajustado"
+        }
+      ],
+      "conclusion": {
+        "hecho": "presion_cronograma",
+        "valor": "media",
+        "lectura": "Presión de cronograma: media"
+      },
+      "evidencia": {
+        "id": "E-PLA-AJUSTADO",
+        "titulo": "Cronograma ajustado",
+        "detalle": "El plan cierra sólo si nada sale mal, y siempre sale algo mal.",
+        "categoria": "planificacion",
+        "puntos": 1,
+        "recomendaciones": [
+          "REC-BUFFER"
+        ]
+      }
+    },
+    {
+      "id": "R-23",
+      "nombre": "Sin planificación",
+      "enunciado": "SI planificación = inexistente ENTONCES riesgo de planificación = alto (+3)",
+      "prioridad": 68,
+      "condiciones": [
+        {
+          "hecho": "planificacion",
+          "operador": "eq",
+          "valor": "inexistente",
+          "lectura": "planificación = inexistente"
+        }
+      ],
+      "conclusion": {
+        "hecho": "riesgo_planificacion",
+        "valor": "alto",
+        "lectura": "Riesgo de planificación: alto"
+      },
+      "evidencia": {
+        "id": "E-PLA-SIN-PLAN",
+        "titulo": "Proyecto sin planificación",
+        "detalle": "Sin hitos ni dependencias no hay contra qué comparar el avance: la desviación se descubre al final.",
+        "categoria": "planificacion",
+        "puntos": 3,
+        "recomendaciones": [
+          "REC-PLAN",
+          "REC-STAKEHOLDERS"
+        ]
+      }
+    },
+    {
+      "id": "R-24",
+      "nombre": "Planificación básica",
+      "enunciado": "SI planificación = básica ENTONCES riesgo de planificación = medio (+1)",
+      "prioridad": 67,
+      "condiciones": [
+        {
+          "hecho": "planificacion",
+          "operador": "eq",
+          "valor": "basica",
+          "lectura": "planificación = básica"
+        }
+      ],
+      "conclusion": {
+        "hecho": "riesgo_planificacion",
+        "valor": "medio",
+        "lectura": "Riesgo de planificación: medio"
+      },
+      "evidencia": {
+        "id": "E-PLA-BASICA",
+        "titulo": "Planificación básica",
+        "detalle": "Hay un plan general, pero sin dependencias explícitas los bloqueos aparecen sin aviso.",
+        "categoria": "planificacion",
+        "puntos": 1,
+        "recomendaciones": [
+          "REC-PLAN"
+        ]
+      }
+    },
+    {
+      "id": "R-25",
+      "nombre": "Volatilidad sostenida en el tiempo",
+      "enunciado": "SI horizonte = largo Y requisitos cambiantes = alto ENTONCES volatilidad prolongada (+2)",
+      "prioridad": 66,
+      "condiciones": [
+        {
+          "hecho": "horizonte",
+          "operador": "eq",
+          "valor": "largo",
+          "lectura": "horizonte = largo"
+        },
+        {
+          "hecho": "requisitos_cambiantes",
+          "operador": "eq",
+          "valor": "alto",
+          "lectura": "requisitos cambiantes = alto"
+        }
+      ],
+      "conclusion": {
+        "hecho": "volatilidad_prolongada",
+        "valor": true,
+        "lectura": "Volatilidad prolongada"
+      },
+      "evidencia": {
+        "id": "E-PLA-VOLATIL-LARGO",
+        "titulo": "Requisitos volátiles en un proyecto largo",
+        "detalle": "Cuanto más dura el proyecto, más veces cambia el alcance y más lejos queda el plan original.",
+        "categoria": "planificacion",
+        "puntos": 2,
+        "recomendaciones": [
+          "REC-BASELINE-REQ",
+          "REC-STAKEHOLDERS"
+        ]
+      }
+    },
+    {
+      "id": "R-26",
+      "nombre": "Entrega expuesta a terceros",
+      "enunciado": "SI tiempo disponible = bajo Y dependencias externas = críticas ENTONCES riesgo de entrega = alto (+2)",
+      "prioridad": 65,
+      "condiciones": [
+        {
+          "hecho": "tiempo_disponible",
+          "operador": "eq",
+          "valor": "bajo",
+          "lectura": "tiempo disponible = bajo"
+        },
+        {
+          "hecho": "dependencias_externas",
+          "operador": "eq",
+          "valor": "criticas",
+          "lectura": "dependencias externas = críticas"
+        }
+      ],
+      "conclusion": {
+        "hecho": "riesgo_entrega",
+        "valor": "alto",
+        "lectura": "Riesgo de entrega: alto"
+      },
+      "evidencia": {
+        "id": "E-PLA-ENTREGA",
+        "titulo": "Entrega ajustada dependiendo de terceros",
+        "detalle": "No hay margen para absorber una demora que el equipo no puede resolver por su cuenta.",
+        "categoria": "planificacion",
+        "puntos": 2,
+        "recomendaciones": [
+          "REC-DEPENDENCIAS",
+          "REC-BUFFER"
+        ]
+      }
+    },
+    {
+      "id": "R-30",
+      "nombre": "Entrega frágil",
+      "enunciado": "SI riesgo de calidad = alto Y riesgo técnico = alto ENTONCES fragilidad de entrega = crítica (+3)",
+      "prioridad": 40,
+      "condiciones": [
+        {
+          "hecho": "riesgo_calidad",
+          "operador": "eq",
+          "valor": "alto",
+          "lectura": "riesgo de calidad = alto"
+        },
+        {
+          "hecho": "riesgo_tecnico",
+          "operador": "eq",
+          "valor": "alto",
+          "lectura": "riesgo técnico = alto"
+        }
+      ],
+      "conclusion": {
+        "hecho": "fragilidad_entrega",
+        "valor": "critica",
+        "lectura": "Fragilidad de entrega: crítica"
+      },
+      "evidencia": {
+        "id": "E-CAL-FRAGIL",
+        "titulo": "Entrega frágil",
+        "detalle": "Sin pruebas que detecten el error ni historial que permita volver atrás, cada entrega es irreversible.",
+        "categoria": "calidad",
+        "puntos": 3,
+        "recomendaciones": [
+          "REC-CI",
+          "REC-COBERTURA",
+          "REC-VCS"
+        ]
+      }
+    },
+    {
+      "id": "R-31",
+      "nombre": "Colisión entre alcance y tiempo",
+      "enunciado": "SI alcance no controlado Y presión de cronograma = alta ENTONCES colisión alcance–tiempo (+3)",
+      "prioridad": 39,
+      "condiciones": [
+        {
+          "hecho": "alcance_no_controlado",
+          "operador": "eq",
+          "valor": true,
+          "lectura": "alcance no controlado"
+        },
+        {
+          "hecho": "presion_cronograma",
+          "operador": "eq",
+          "valor": "alta",
+          "lectura": "presión de cronograma = alta"
+        }
+      ],
+      "conclusion": {
+        "hecho": "colision_alcance_tiempo",
+        "valor": true,
+        "lectura": "Colisión alcance–tiempo"
+      },
+      "evidencia": {
+        "id": "E-PLA-COLISION",
+        "titulo": "Alcance que crece contra un plazo que no se mueve",
+        "detalle": "Las dos variables empujan en sentidos opuestos: una de las dos va a ceder, y no se eligió cuál.",
+        "categoria": "planificacion",
+        "puntos": 3,
+        "recomendaciones": [
+          "REC-ALCANCE",
+          "REC-REPRIORIZAR",
+          "REC-STAKEHOLDERS"
+        ]
+      }
+    },
+    {
+      "id": "R-32",
+      "nombre": "Defectos probables",
+      "enunciado": "SI capacidad técnica = baja Y cobertura de pruebas = crítica ENTONCES riesgo de defectos = alto (+2)",
+      "prioridad": 38,
+      "condiciones": [
+        {
+          "hecho": "capacidad_tecnica",
+          "operador": "eq",
+          "valor": "baja",
+          "lectura": "capacidad técnica = baja"
+        },
+        {
+          "hecho": "cobertura_pruebas",
+          "operador": "eq",
+          "valor": "critica",
+          "lectura": "cobertura de pruebas = crítica"
+        }
+      ],
+      "conclusion": {
+        "hecho": "riesgo_defectos",
+        "valor": "alto",
+        "lectura": "Riesgo de defectos: alto"
+      },
+      "evidencia": {
+        "id": "E-CAL-DEFECTOS",
+        "titulo": "Equipo sin experiencia y sin red de pruebas",
+        "detalle": "Quien más errores va a cometer es quien menos apoyo automático tiene para detectarlos.",
+        "categoria": "calidad",
+        "puntos": 2,
+        "recomendaciones": [
+          "REC-MENTORIA",
+          "REC-COBERTURA",
+          "REC-DEFINICION-HECHO"
+        ]
+      }
+    },
+    {
+      "id": "R-33",
+      "nombre": "Continuidad del equipo comprometida",
+      "enunciado": "SI riesgo de coordinación = alto Y pérdida de conocimiento = alta ENTONCES continuidad del equipo = crítica (+2)",
+      "prioridad": 37,
+      "condiciones": [
+        {
+          "hecho": "riesgo_coordinacion",
+          "operador": "eq",
+          "valor": "alto",
+          "lectura": "riesgo de coordinación = alto"
+        },
+        {
+          "hecho": "perdida_conocimiento",
+          "operador": "eq",
+          "valor": "alta",
+          "lectura": "pérdida de conocimiento = alta"
+        }
+      ],
+      "conclusion": {
+        "hecho": "continuidad_equipo",
+        "valor": "critica",
+        "lectura": "Continuidad del equipo: crítica"
+      },
+      "evidencia": {
+        "id": "E-EQ-CONTINUIDAD",
+        "titulo": "Continuidad del equipo comprometida",
+        "detalle": "Un equipo grande, sin experiencia y con salidas frecuentes pierde contexto más rápido de lo que lo construye.",
+        "categoria": "equipo",
+        "puntos": 2,
+        "recomendaciones": [
+          "REC-DOC-CONOCIMIENTO",
+          "REC-SUBEQUIPOS",
+          "REC-ONBOARDING"
+        ]
+      }
+    },
+    {
+      "id": "R-34",
+      "nombre": "Riesgo sistémico",
+      "enunciado": "SI fragilidad de entrega = crítica Y colisión alcance–tiempo ENTONCES riesgo sistémico (+3)",
+      "prioridad": 20,
+      "condiciones": [
+        {
+          "hecho": "fragilidad_entrega",
+          "operador": "eq",
+          "valor": "critica",
+          "lectura": "fragilidad de entrega = crítica"
+        },
+        {
+          "hecho": "colision_alcance_tiempo",
+          "operador": "eq",
+          "valor": true,
+          "lectura": "colisión alcance–tiempo"
+        }
+      ],
+      "conclusion": {
+        "hecho": "riesgo_sistemico",
+        "valor": true,
+        "lectura": "Riesgo sistémico"
+      },
+      "evidencia": {
+        "id": "E-GES-SISTEMICO",
+        "titulo": "Riesgo sistémico",
+        "detalle": "Los problemas dejaron de ser independientes: se alimentan entre sí y el equipo solo no puede cortarlos.",
+        "categoria": "gestion",
+        "puntos": 3,
+        "recomendaciones": [
+          "REC-ESCALAR",
+          "REC-REPRIORIZAR"
+        ]
+      }
+    }
+  ],
+  "recomendaciones": [
+    {
+      "id": "REC-GESTION-CAMBIOS",
+      "titulo": "Abrir un proceso formal de gestión de cambios",
+      "accion": "Toda solicitud nueva entra por un único canal, se estima y se aprueba antes de tocar el plan. Sin ese paso, el alcance crece sin que nadie lo mida.",
+      "categoria": "requisitos",
+      "prioridad": 1
+    },
+    {
+      "id": "REC-BASELINE-REQ",
+      "titulo": "Congelar una línea base de requisitos por iteración",
+      "accion": "Fijá el alcance de cada iteración al empezarla. Lo que llegue después entra en la siguiente, no en la actual.",
+      "categoria": "requisitos",
+      "prioridad": 2
+    },
+    {
+      "id": "REC-DOC-REQ",
+      "titulo": "Escribir criterios de aceptación verificables",
+      "accion": "Cada requisito necesita una condición que se pueda probar. Un requisito que no se puede verificar no se puede dar por terminado.",
+      "categoria": "requisitos",
+      "prioridad": 2
+    },
+    {
+      "id": "REC-ALCANCE",
+      "titulo": "Definir un alcance mínimo entregable",
+      "accion": "Separá lo imprescindible de lo deseable y comprometé sólo lo primero. El resto queda como candidato para versiones siguientes.",
+      "categoria": "requisitos",
+      "prioridad": 1
+    },
+    {
+      "id": "REC-COBERTURA",
+      "titulo": "Cubrir con pruebas los flujos críticos",
+      "accion": "Identificá los tres o cuatro recorridos que no pueden fallar y escribí pruebas para ellos antes de sumar funcionalidad nueva.",
+      "categoria": "calidad",
+      "prioridad": 1
+    },
+    {
+      "id": "REC-AUTOMATIZAR",
+      "titulo": "Automatizar las pruebas repetitivas",
+      "accion": "Lo que se prueba a mano en cada entrega es lo primero que se deja de probar cuando aprieta el tiempo. Automatizalo.",
+      "categoria": "calidad",
+      "prioridad": 2
+    },
+    {
+      "id": "REC-DEFINICION-HECHO",
+      "titulo": "Acordar una definición de terminado",
+      "accion": "Una tarea está terminada cuando pasa sus pruebas, está revisada e integrada. Escribilo y aplicalo sin excepciones.",
+      "categoria": "calidad",
+      "prioridad": 2
+    },
+    {
+      "id": "REC-CI",
+      "titulo": "Montar integración continua",
+      "accion": "Compilá y ejecutá las pruebas en cada cambio subido. Un fallo detectado en minutos cuesta una fracción de uno detectado en la entrega.",
+      "categoria": "tecnico",
+      "prioridad": 1
+    },
+    {
+      "id": "REC-VCS",
+      "titulo": "Adoptar un flujo de ramas con revisión obligatoria",
+      "accion": "Rama por cambio, revisión antes de integrar, historial legible. Sin esto no hay forma de volver atrás con confianza.",
+      "categoria": "tecnico",
+      "prioridad": 1
+    },
+    {
+      "id": "REC-VCS-BASICO",
+      "titulo": "Unificar el uso del control de versiones",
+      "accion": "Todo el equipo, el mismo flujo, el mismo repositorio. Las prácticas parciales generan la falsa sensación de estar cubiertos.",
+      "categoria": "tecnico",
+      "prioridad": 2
+    },
+    {
+      "id": "REC-INTEGRACION-TEMPRANA",
+      "titulo": "Integrar temprano y seguido",
+      "accion": "Juntá el trabajo de todos varias veces por semana. Cuanto más tarde se integra, más caro sale el conflicto.",
+      "categoria": "tecnico",
+      "prioridad": 1
+    },
+    {
+      "id": "REC-MENTORIA",
+      "titulo": "Emparejar a quienes tienen menos experiencia",
+      "accion": "Asigná mentoría y revisión por pares en las áreas sensibles. La experiencia se transfiere trabajando, no leyendo documentación.",
+      "categoria": "equipo",
+      "prioridad": 1
+    },
+    {
+      "id": "REC-SUBEQUIPOS",
+      "titulo": "Dividir el equipo en células con responsable técnico",
+      "accion": "Grupos de cuatro a seis personas con un referente por área. Un equipo grande sin estructura gasta más en coordinarse que en construir.",
+      "categoria": "gestion",
+      "prioridad": 1
+    },
+    {
+      "id": "REC-DOC-CONOCIMIENTO",
+      "titulo": "Documentar decisiones y rotar responsabilidades",
+      "accion": "Registrá por qué se tomó cada decisión importante y evitá que un área dependa de una sola persona.",
+      "categoria": "equipo",
+      "prioridad": 1
+    },
+    {
+      "id": "REC-ONBOARDING",
+      "titulo": "Formalizar la incorporación de nuevas personas",
+      "accion": "Un recorrido de entrada de una semana, con acompañante asignado, reduce el costo de cada reemplazo.",
+      "categoria": "equipo",
+      "prioridad": 2
+    },
+    {
+      "id": "REC-PLAN",
+      "titulo": "Construir un plan con hitos y dependencias explícitas",
+      "accion": "Hitos con fecha, entregable y responsable. Sin plan no hay forma de detectar una desviación a tiempo.",
+      "categoria": "planificacion",
+      "prioridad": 1
+    },
+    {
+      "id": "REC-REPRIORIZAR",
+      "titulo": "Renegociar alcance o plazo antes de comprometer la fecha",
+      "accion": "Poné sobre la mesa la relación entre alcance, tiempo y equipo. Comprometer una fecha que el plan no sostiene traslada el problema, no lo resuelve.",
+      "categoria": "planificacion",
+      "prioridad": 1
+    },
+    {
+      "id": "REC-BUFFER",
+      "titulo": "Reservar holgura para integración y corrección",
+      "accion": "Guardá entre el 15 % y el 20 % del cronograma para estabilizar. Un plan sin holgura falla con el primer imprevisto.",
+      "categoria": "planificacion",
+      "prioridad": 2
+    },
+    {
+      "id": "REC-DEPENDENCIAS",
+      "titulo": "Acordar interfaces y fechas con los proveedores externos",
+      "accion": "Contrato de interfaz por escrito y fecha de disponibilidad confirmada. Además, definí qué hace el equipo si la dependencia no llega.",
+      "categoria": "tecnico",
+      "prioridad": 1
+    },
+    {
+      "id": "REC-STAKEHOLDERS",
+      "titulo": "Revisar el avance con el cliente en ciclos cortos",
+      "accion": "Demostración cada dos semanas con el producto funcionando. Corrige el rumbo antes de que la desviación sea cara.",
+      "categoria": "gestion",
+      "prioridad": 2
+    },
+    {
+      "id": "REC-ESCALAR",
+      "titulo": "Escalar el riesgo a dirección y activar contingencia",
+      "accion": "Varios frentes críticos se refuerzan entre sí. Presentá el cuadro completo a quien pueda cambiar alcance, plazo o presupuesto.",
+      "categoria": "gestion",
+      "prioridad": 1
+    }
+  ]
+}
