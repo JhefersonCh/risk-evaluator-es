@@ -1,0 +1,662 @@
+@import 'tailwindcss';
+
+/* ==================================================================
+   EVALUADOR DE RIESGO
+   ------------------------------------------------------------------
+   Dirección visual: instrumento técnico de medición.
+   Papel gris-azulado frío, tinta naval, tipografía industrial.
+   El elemento firma es la columna acumuladora: un tubo graduado que
+   se llena a medida que las reglas se activan.
+
+   Las utilidades de Tailwind resuelven layout, espaciado y tipografía.
+   Acá viven sólo los tokens del sistema y los widgets que tienen
+   estado o geometría propia.
+   ================================================================== */
+
+@theme {
+  /* --- Superficie ------------------------------------------------ */
+  --color-paper: #e4e8ec;
+  --color-paper-deep: #d5dbe1;
+  --color-surface: #f8fafb;
+  --color-sunk: #eef2f5;
+
+  /* --- Tinta ----------------------------------------------------- */
+  --color-ink: #0c1420;
+  --color-ink-2: #33404f;
+  --color-graphite: #6a7784;
+  --color-line: #c0c9d2;
+  --color-line-soft: #d9e0e6;
+
+  /* --- Señal del motor ------------------------------------------- */
+  --color-signal: #1b3ad1;
+  --color-signal-deep: #12269a;
+  --color-signal-wash: #dde3fb;
+
+  /* --- Niveles de riesgo ----------------------------------------- */
+  --color-low: #0b6e62;
+  --color-low-wash: #d8ebe7;
+  --color-mid: #9a5405;
+  --color-mid-wash: #f4e6d2;
+  --color-high: #97182b;
+  --color-high-wash: #f4dee1;
+
+  /* --- Tipografía ------------------------------------------------ */
+  --font-display: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --text-display: clamp(2.75rem, 7vw, 5.5rem);
+  --text-display--line-height: 0.98;
+  --text-h1: clamp(1.75rem, 3.6vw, 2.6rem);
+  --text-h1--line-height: 1.06;
+  --text-h2: clamp(1.25rem, 2vw, 1.5rem);
+  --text-h2--line-height: 1.15;
+  --text-verdict: clamp(3.25rem, 11vw, 7rem);
+  --text-verdict--line-height: 0.92;
+
+  /* --- Movimiento: personalidad Corporate, decidida y sin rebote --- */
+  --ease-signature: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emph: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --ease-exit: cubic-bezier(0.3, 0, 1, 1);
+
+  --animate-screen-in: screen-in 420ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
+  --animate-rise: rise 260ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
+  --animate-slide-in: slide-in 260ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
+  --animate-verdict-in: verdict-in 420ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
+  --animate-engine-pulse: engine-pulse 1.4s cubic-bezier(0.2, 0, 0, 1) infinite;
+
+  @keyframes screen-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes slide-in {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes verdict-in {
+    from { opacity: 0; transform: translateY(14px) scale(0.985); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes engine-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.35; transform: scale(0.7); }
+  }
+
+  /* --- Relieve ---------------------------------------------------- */
+  --shadow-raised: 0 1px 0 rgb(12 20 32 / 0.06), 0 2px 10px rgb(12 20 32 / 0.05);
+  --shadow-lift: 0 2px 0 rgb(12 20 32 / 0.07), 0 10px 28px rgb(12 20 32 / 0.1);
+
+  --radius-panel: 3px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Base                                                                */
+/* ------------------------------------------------------------------ */
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    /* La retícula de fondo es papel milimetrado, no decoración suelta. */
+    background-color: var(--color-paper);
+    background-image:
+      linear-gradient(rgb(12 20 32 / 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(12 20 32 / 0.035) 1px, transparent 1px);
+    background-size: 64px 64px;
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-stretch: 112%;
+    letter-spacing: -0.018em;
+    line-height: 1.08;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-signal);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* El movimiento es refuerzo, nunca requisito. */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Utilidades propias                                                  */
+/* ------------------------------------------------------------------ */
+
+/* Trama diagonal: codifica severidad sin depender del color.
+   La densidad se ajusta con --hatch-gap desde el marcado. */
+@utility hatch {
+  background-image: repeating-linear-gradient(
+    45deg,
+    currentColor 0 1px,
+    transparent 1px var(--hatch-gap, 8px)
+  );
+}
+
+/* Etiqueta monoespaciada en versalitas: el rótulo del instrumento. */
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-graphite);
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------------------------------------------------ */
+/* Componentes                                                         */
+/* ------------------------------------------------------------------ */
+
+@layer components {
+
+  /* --- Botones ---------------------------------------------------- */
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-3 rounded-panel border
+           border-ink bg-ink px-6 py-3.5 font-mono text-sm font-medium
+           tracking-[0.06em] uppercase text-paper cursor-pointer
+           transition-[background-color,border-color,color,transform,box-shadow]
+           duration-150 ease-signature;
+  }
+
+  .btn:hover:not(:disabled) {
+    @apply bg-signal-deep border-signal-deep shadow-lift;
+  }
+
+  .btn:active:not(:disabled) {
+    @apply translate-y-px shadow-none;
+  }
+
+  .btn:disabled {
+    @apply opacity-35 cursor-not-allowed;
+  }
+
+  .btn--ghost {
+    @apply bg-transparent text-ink border-line;
+  }
+
+  .btn--ghost:hover:not(:disabled) {
+    @apply bg-surface text-ink border-ink shadow-none;
+  }
+
+  .btn--lg {
+    @apply px-8 py-4 text-[0.9375rem];
+  }
+
+  .btn--sm {
+    @apply px-4 py-2 text-xs;
+  }
+
+  .btn__arrow {
+    @apply transition-transform duration-150 ease-signature;
+  }
+
+  .btn:hover:not(:disabled) .btn__arrow {
+    @apply translate-x-[3px];
+  }
+
+  /* --- Ficha de condición / hecho --------------------------------- */
+
+  .chip {
+    @apply inline-block rounded-xs border border-line bg-surface px-2 py-px
+           font-mono text-[0.6875rem] text-ink-2;
+  }
+
+  .chip--derived {
+    @apply border-dashed border-signal text-signal-deep;
+  }
+
+  /* --- Estado del motor: la capa ambiente ------------------------- */
+
+  .engine-state {
+    @apply inline-flex items-center gap-2 rounded-full border border-line
+           bg-surface px-3 py-1 font-mono text-xs tracking-[0.1em] uppercase
+           text-ink-2 whitespace-nowrap;
+  }
+
+  .engine-state__dot {
+    @apply size-1.5 shrink-0 rounded-full bg-graphite;
+  }
+
+  .engine-state[data-state='running'] {
+    @apply border-signal text-signal-deep;
+  }
+
+  .engine-state[data-state='running'] .engine-state__dot {
+    @apply bg-signal animate-engine-pulse;
+  }
+
+  .engine-state[data-state='stable'] .engine-state__dot {
+    @apply bg-low;
+  }
+
+  /* --- Campos ------------------------------------------------------ */
+
+  .field {
+    @apply w-full max-w-105 rounded-panel border border-line bg-surface px-4 py-3
+           font-body text-base text-ink transition-colors duration-150 ease-signature;
+  }
+
+  .field:hover {
+    @apply border-ink-2;
+  }
+
+  /* Opción segmentada: radio nativo con presentación propia.
+     El input real sigue ahí, así que el teclado y el lector de
+     pantalla funcionan sin trabajo extra. */
+  .seg-opt {
+    @apply relative block rounded-panel border border-line bg-surface p-4
+           cursor-pointer transition-[border-color,background-color,box-shadow,transform]
+           duration-150 ease-signature;
+  }
+
+  .seg-opt:hover {
+    @apply border-ink-2 shadow-raised;
+  }
+
+  .seg-opt:active {
+    @apply translate-y-px;
+  }
+
+  .seg-opt input {
+    @apply absolute size-px opacity-0;
+  }
+
+  .seg-opt:has(input:focus-visible) {
+    outline: 2px solid var(--color-signal);
+    outline-offset: 2px;
+  }
+
+  .seg-opt:has(input:checked) {
+    @apply border-ink bg-paper;
+    box-shadow: inset 0 0 0 1px var(--color-ink);
+  }
+
+  .seg-opt:has(input:checked) .seg-opt__hint {
+    @apply text-ink-2;
+  }
+
+  /* --- Escala numérica --------------------------------------------- */
+
+  .scale-input {
+    -webkit-appearance: none;
+    appearance: none;
+    @apply h-6 w-full max-w-130 cursor-pointer bg-transparent;
+  }
+
+  .scale-input::-webkit-slider-runnable-track {
+    height: 3px;
+    border-radius: 2px;
+    background: var(--color-line);
+  }
+
+  .scale-input::-moz-range-track {
+    height: 3px;
+    border-radius: 2px;
+    background: var(--color-line);
+  }
+
+  .scale-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    margin-top: -7.5px;
+    border: 1px solid var(--color-ink);
+    border-radius: 2px;
+    background: var(--color-ink);
+    transition: transform 140ms var(--ease-signature);
+  }
+
+  .scale-input::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--color-ink);
+    border-radius: 2px;
+    background: var(--color-ink);
+  }
+
+  .scale-input:hover::-webkit-slider-thumb {
+    transform: scale(1.12);
+  }
+
+  /* --- Riel de pasos ------------------------------------------------ */
+
+  .rail-step {
+    @apply grid w-full grid-cols-[auto_1fr] items-baseline gap-3 border-0
+           border-b border-line-soft bg-none py-3 text-left text-graphite
+           cursor-pointer transition-[color,padding-left] duration-150 ease-signature;
+  }
+
+  .rail-step:hover:not(:disabled) {
+    @apply text-ink pl-2;
+  }
+
+  .rail-step[aria-current='step'] {
+    @apply text-ink;
+  }
+
+  .rail-step[aria-current='step'] .rail-step__index {
+    @apply text-signal-deep;
+  }
+
+  .rail-step[data-done='true'] .rail-step__index::after {
+    content: ' ✓';
+    color: var(--color-low);
+  }
+
+  /* --- Traza de inferencia ------------------------------------------ */
+
+  .trace-item {
+    @apply relative py-3 pl-6 animate-slide-in;
+  }
+
+  .trace-item::before {
+    content: '';
+    @apply absolute -left-1 top-5 size-[7px] rounded-full bg-line;
+  }
+
+  .trace-item[data-kind='rule-fired']::before {
+    background: var(--color-signal);
+    box-shadow: 0 0 0 3px var(--color-signal-wash);
+  }
+
+  .trace-item[data-kind='cycle-start']::before {
+    @apply left-[-5px] size-[9px] rounded-none bg-ink;
+  }
+
+  .trace-item[data-kind='verdict']::before {
+    background: var(--color-ink);
+    box-shadow: 0 0 0 3px var(--color-paper-deep);
+  }
+
+  .trace-points {
+    @apply ml-auto shrink-0 rounded-xs border border-signal bg-signal-wash
+           px-2 py-px font-mono text-xs font-medium text-signal-deep;
+  }
+
+  /* --- Nodos del grafo de inferencia -------------------------------- */
+
+  .node {
+    @apply rounded-xs border border-line bg-paper p-3 font-mono
+           text-xs/relaxed text-ink;
+  }
+
+  .node--derived {
+    @apply border-dashed border-signal bg-signal-wash;
+  }
+
+  .node--rule {
+    @apply border-ink bg-ink text-center font-medium text-paper;
+  }
+
+  .node--out {
+    @apply border-ink-2 bg-sunk;
+  }
+
+  /* Llave que une varias condiciones en una sola regla.
+     Reproduce el corchete del diagrama: dos ramas que confluyen. */
+  .brace {
+    @apply relative min-h-7 self-stretch;
+  }
+
+  .brace::before {
+    content: '';
+    @apply absolute left-1/2 top-3.5 bottom-3.5 w-px bg-ink-2;
+  }
+
+  .brace::after {
+    content: '';
+    @apply absolute left-1/2 right-0 top-1/2 h-px bg-ink-2;
+  }
+
+  .brace__stub {
+    @apply absolute left-0 h-px w-1/2 bg-ink-2;
+  }
+
+  /* --- Detalle de regla --------------------------------------------- */
+
+  .rule-row summary {
+    @apply grid grid-cols-[auto_1fr_auto] items-baseline gap-3 px-4 py-3
+           cursor-pointer list-none;
+  }
+
+  .rule-row summary::-webkit-details-marker {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Columna acumuladora — elemento firma                                */
+/* ------------------------------------------------------------------ */
+
+@layer components {
+
+  .acc {
+    --acc-track-h: clamp(260px, 40vh, 420px);
+    @apply grid w-full max-w-85 items-start gap-x-4 gap-y-0 m-0;
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      'gauge readout'
+      'gauge caption';
+  }
+
+  .acc__gauge {
+    grid-area: gauge;
+    height: var(--acc-track-h);
+    @apply relative flex shrink-0 items-stretch gap-2;
+  }
+
+  /* Regla graduada al costado del tubo */
+  .acc__scale {
+    @apply relative w-8.5 shrink-0;
+  }
+
+  .acc__tick {
+    @apply absolute right-0 flex translate-y-1/2 items-center justify-end gap-1
+           font-mono text-[0.6875rem] text-graphite;
+  }
+
+  .acc__tick::after {
+    content: '';
+    @apply h-px w-[5px] bg-line;
+  }
+
+  .acc__tick--major {
+    @apply font-medium text-ink;
+  }
+
+  .acc__tick--major::after {
+    @apply w-[9px] bg-ink-2;
+  }
+
+  .acc__track {
+    @apply relative w-19 shrink-0 overflow-hidden rounded-xs border border-ink-2 bg-sunk;
+  }
+
+  /* Zonas de umbral al fondo del tubo. La trama se densifica con el
+     nivel, así que el instrumento se lee también en escala de grises. */
+  .acc__band {
+    @apply absolute inset-x-0 opacity-50;
+    color: var(--band-color);
+    background-color: var(--band-wash);
+    background-image: repeating-linear-gradient(
+      45deg,
+      currentColor 0 1px,
+      transparent 1px var(--band-gap)
+    );
+  }
+
+  .acc__band--bajo {
+    --band-color: var(--color-low);
+    --band-wash: var(--color-low-wash);
+    --band-gap: 11px;
+  }
+
+  .acc__band--medio {
+    --band-color: var(--color-mid);
+    --band-wash: var(--color-mid-wash);
+    --band-gap: 7px;
+  }
+
+  .acc__band--alto {
+    --band-color: var(--color-high);
+    --band-wash: var(--color-high-wash);
+    --band-gap: 4px;
+  }
+
+  .acc__bandline {
+    @apply absolute inset-x-0 h-px bg-ink-2 opacity-45;
+  }
+
+  .acc__stack {
+    @apply absolute inset-0;
+  }
+
+  /* Cada segmento es una regla que aportó evidencia. */
+  .acc__seg {
+    @apply absolute inset-x-0 border-t border-paper bg-ink;
+    transition:
+      height 420ms var(--ease-emph),
+      opacity 260ms var(--ease-signature);
+  }
+
+  .acc__seg--entering {
+    @apply opacity-0;
+  }
+
+  .acc__needle {
+    @apply pointer-events-none absolute -inset-x-1 h-0.5 bg-ink;
+    transition: bottom 420ms var(--ease-emph);
+  }
+
+  .acc__needle::after {
+    content: '';
+    @apply absolute right-0.5 -top-[3px] size-2 rotate-45 bg-ink;
+  }
+
+  .acc__readout {
+    grid-area: readout;
+    @apply pt-1;
+  }
+
+  .acc__score {
+    @apply flex items-baseline gap-2 font-display text-[clamp(2.5rem,6vw,3.5rem)]/none
+           font-bold tracking-[-0.03em] tabular;
+    font-stretch: 122%;
+  }
+
+  .acc__score.is-ticking {
+    animation: tick 140ms var(--ease-signature);
+  }
+
+  @keyframes tick {
+    50% { transform: translateY(-2px); }
+  }
+
+  .acc__level {
+    @apply mt-3 inline-flex items-center gap-2 rounded-xs border border-current
+           px-3 py-1 font-mono text-xs font-medium tracking-[0.12em] uppercase;
+  }
+
+  .acc__caption {
+    grid-area: caption;
+    @apply mt-4 text-sm text-ink-2;
+  }
+
+  .acc[data-level='bajo'] .acc__level { @apply text-low bg-low-wash; }
+  .acc[data-level='medio'] .acc__level { @apply text-mid bg-mid-wash; }
+  .acc[data-level='alto'] .acc__level { @apply text-high bg-high-wash; }
+  .acc[data-level='pendiente'] .acc__level { @apply text-graphite bg-sunk; }
+
+  @media (max-width: 640px) {
+    .acc {
+      --acc-track-h: 240px;
+      @apply max-w-none;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Escala de umbrales y barras de categoría                            */
+/* ------------------------------------------------------------------ */
+
+@layer components {
+
+  .zone {
+    @apply flex items-center justify-center border-r border-ink-2 font-mono
+           text-[0.6875rem] tracking-[0.1em] uppercase;
+    color: var(--band-color);
+    background-color: var(--band-wash);
+    background-image: repeating-linear-gradient(
+      45deg,
+      currentColor 0 1px,
+      transparent 1px var(--band-gap)
+    );
+  }
+
+  .zone:last-child {
+    @apply border-r-0;
+  }
+
+  .zone--bajo { --band-color: var(--color-low); --band-wash: var(--color-low-wash); --band-gap: 11px; }
+  .zone--medio { --band-color: var(--color-mid); --band-wash: var(--color-mid-wash); --band-gap: 7px; }
+  .zone--alto { --band-color: var(--color-high); --band-wash: var(--color-high-wash); --band-gap: 4px; }
+
+  .zone > span {
+    @apply rounded-xs bg-surface px-2 text-ink-2;
+  }
+
+  .marker {
+    @apply absolute -top-1.5 -bottom-1.5 w-0.5 bg-ink;
+    transition: left 420ms var(--ease-emph);
+  }
+
+  .marker::before {
+    content: attr(data-score);
+    @apply absolute -top-6 left-1/2 -translate-x-1/2 rounded-xs bg-ink px-2
+           font-mono text-[0.6875rem] whitespace-nowrap text-paper;
+  }
+
+  .cat-fill {
+    @apply h-full w-0 border-r border-current;
+    color: var(--band-color, var(--color-ink));
+    background-color: var(--band-wash, var(--color-sunk));
+    background-image: repeating-linear-gradient(
+      45deg,
+      currentColor 0 1px,
+      transparent 1px var(--band-gap, 6px)
+    );
+    transition: width 420ms var(--ease-emph);
+  }
+
+  .cat-fill[data-weight='alto'] { --band-color: var(--color-high); --band-wash: var(--color-high-wash); --band-gap: 4px; }
+  .cat-fill[data-weight='medio'] { --band-color: var(--color-mid); --band-wash: var(--color-mid-wash); --band-gap: 7px; }
+  .cat-fill[data-weight='bajo'] { --band-color: var(--color-low); --band-wash: var(--color-low-wash); --band-gap: 11px; }
+  .cat-fill[data-weight='nulo'] { @apply border-r-0; }
+}

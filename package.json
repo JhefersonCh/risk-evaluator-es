@@ -1,0 +1,26 @@
+{
+  "name": "risk-evaluator",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Sistema experto basado en reglas para evaluar el nivel de riesgo de un proyecto de software mediante encadenamiento hacia adelante.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run test:engine && npm run test:ui",
+    "test:engine": "tsc -p tsconfig.test.json && node .tmp-test/test/scenarios.js",
+    "test:ui": "tsc -p tsconfig.smoke.json && node .tmp-smoke/test/ui-smoke.js"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/jsdom": "^30.0.0",
+    "@types/node": "^26.4.1",
+    "jsdom": "^29.1.1",
+    "playwright": "^1.62.1",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10"
+  }
+}
